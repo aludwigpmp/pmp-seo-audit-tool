@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PMP SEO Audit Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green-dark: #085041;
+  --green-mid: #0F6E56;
+  --green: #1D9E75;
+  --green-light: #5DCAA5;
+  --green-pale: #E1F5EE;
+  --amber-dark: #412402;
+  --amber-mid: #633806;
+  --amber: #854F0B;
+  --amber-light: #FAC775;
+  --amber-pale: #FAEEDA;
+  --blue-pale: #E6F1FB;
+  --blue-light: #85B7EB;
+  --blue: #185FA5;
+  --blue-dark: #042C53;
+  --gray-900: #1a1a18;
+  --gray-700: #2e2e2b;
+  --gray-500: #5F5E5A;
+  --gray-400: #888780;
+  --gray-300: #B4B2A9;
+  --gray-100: #F1EFE8;
+  --gray-50: #FAFAF8;
+  --white: #ffffff;
+  --border: rgba(0,0,0,0.09);
+  --border-strong: rgba(0,0,0,0.16);
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-900);
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+}
+
+.page { max-width: 740px; margin: 0 auto; }
+
+/* ── Header ── */
+.header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 2rem; padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo {
+  width: 44px; height: 44px; background: var(--green);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.logo i { color: #fff; font-size: 22px; }
+.header-text h1 { font-size: 20px; font-weight: 600; color: var(--gray-900); }
+.header-text p { font-size: 13px; color: var(--gray-500); margin-top: 2px; font-family: 'DM Mono', monospace; }
+.internal-badge {
+  font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--gray-100); color: var(--gray-500);
+  border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;
+  white-space: nowrap; margin-top: 4px;
+}
+
+/* ── Section label ── */
+.section-label {
+  font-size: 11px; font-weight: 500; font-family: 'DM Mono', monospace;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-500);
+  margin-bottom: 10px; margin-top: 1.75rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── Phase badge ── */
+.phase-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 20px;
+  margin-bottom: 10px;
+}
+.phase-pill.phase-setup { background: var(--blue-pale); color: var(--blue); border: 1px solid var(--blue-light); }
+.phase-pill.phase-gate  { background: var(--green-pale); color: var(--green-mid); border: 1px solid var(--green-light); }
+.phase-pill.phase-ctx   { background: var(--gray-100); color: var(--gray-500); border: 1px solid var(--border); }
+
+/* ── Firm info ── */
+.firm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width:520px) { .firm-grid { grid-template-columns: 1fr; } }
+
+.field-wrap { display: flex; flex-direction: column; gap: 5px; }
+.field-label { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--gray-500); }
+.field-input {
+  padding: 9px 12px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  background: var(--white); color: var(--gray-900); outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s; width: 100%;
+}
+.field-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,0.12); }
+.field-input::placeholder { color: var(--gray-300); }
+.field-input.mono { font-family: 'DM Mono', monospace; font-size: 13px; }
+
+.url-wrap { position: relative; margin-top: 10px; }
+.url-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--gray-300); font-size: 16px; pointer-events: none; }
+.url-wrap .field-input { padding-left: 34px; }
+
+/* ── Phase 3 setup blocks ── */
+.setup-block {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
+  margin-bottom: 10px; overflow: hidden;
+}
+.setup-block-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.85rem 1.1rem; cursor: pointer;
+  border-bottom: 1px solid transparent; transition: background 0.12s;
+}
+.setup-block-header:hover { background: var(--gray-50); }
+.setup-block.open .setup-block-header { border-bottom-color: var(--border); }
+.setup-block-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 500; color: var(--gray-900);
+}
+.setup-block-title i { font-size: 17px; color: var(--gray-400); }
+.setup-block-meta { display: flex; align-items: center; gap: 8px; }
+.task-progress {
+  font-size: 11px; font-family: 'DM Mono', monospace; color: var(--gray-400);
+}
+.chevron { font-size: 15px; color: var(--gray-400); transition: transform 0.2s; }
+.setup-block.open .chevron { transform: rotate(180deg); }
+
+.setup-block-body { display: none; padding: 0.75rem 1.1rem 1rem; }
+.setup-block.open .setup-block-body { display: block; }
+
+.setup-desc {
+  font-size: 12px; color: var(--gray-500); line-height: 1.55;
+  margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.setup-desc strong { color: var(--gray-700); font-weight: 500; }
+
+/* ── Task checklist rows ── */
+.task-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+}
+.task-row:last-child { border-bottom: none; padding-bottom: 0; }
+.task-row:first-child { padding-top: 0; }
+
+.task-num {
+  font-size: 10px; font-family: 'DM Mono', monospace; color: var(--gray-300);
+  width: 18px; flex-shrink: 0; margin-top: 3px; text-align: right;
+}
+.task-check {
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: 1px solid var(--border-strong); border-radius: 5px;
+  background: var(--gray-50); display: flex; align-items: center; justify-content: center;
+  margin-top: 1px; transition: background 0.15s, border-color 0.15s;
+}
+.task-check.checked { background: var(--green); border-color: var(--green-mid); }
+.task-check i { display: none; font-size: 11px; }
+.task-check.checked i { display: block; color: #fff; }
+.task-text { font-size: 13px; color: var(--gray-700); line-height: 1.45; flex: 1; }
+.task-sub { font-size: 11px; color: var(--gray-300); margin-top: 2px; font-family: 'DM Mono', monospace; }
+
+/* ── Gate cards ── */
+.gates-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width:520px) { .gates-grid { grid-template-columns: 1fr; } }
+
+.gate-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1rem 1.1rem 0.9rem;
+  box-shadow: var(--shadow-card); transition: border-color 0.2s, background 0.2s;
+}
+.gate-card.connected { border-color: var(--green-light); background: var(--green-pale); }
+.gate-card.gap       { border-color: var(--amber-light); background: var(--amber-pale); }
+
+.gate-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+.gate-name { font-size: 14px; font-weight: 500; color: var(--gray-900); display: flex; align-items: center; gap: 6px; }
+.gate-card.connected .gate-name { color: var(--green-dark); }
+.gate-card.gap       .gate-name { color: var(--amber-mid); }
+
+.gate-badge { font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+.badge-pending   { background: var(--gray-100); color: var(--gray-500); }
+.badge-connected { background: var(--green-light); color: var(--green-dark); }
+.badge-gap       { background: var(--amber-light); color: var(--amber-dark); }
+
+.gate-note { font-size: 12px; color: var(--gray-500); line-height: 1.45; margin-bottom: 10px; min-height: 30px; }
+.gate-card.connected .gate-note { color: var(--green-mid); }
+.gate-card.gap       .gate-note { color: var(--amber); }
+
+.gate-btns { display: flex; flex-wrap: wrap; gap: 5px; }
+.gate-btn {
+  font-size: 11px; font-family: 'DM Sans', sans-serif; font-weight: 500;
+  padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-strong);
+  background: var(--white); color: var(--gray-700); cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.gate-btn:hover { background: var(--gray-100); }
+.gate-btn.active     { background: var(--green); border-color: var(--green-mid); color: #fff; }
+.gate-btn.gap-active { background: var(--amber-light); border-color: var(--amber); color: var(--amber-dark); }
+
+/* ── Context box ── */
+.context-box {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1rem 1.25rem; box-shadow: var(--shadow-card);
+}
+.ctx-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+}
+.ctx-row:last-child { border-bottom: none; padding-bottom: 0; }
+.ctx-row:first-child { padding-top: 0; }
+.ctx-check {
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: 1px solid var(--border-strong); border-radius: 5px;
+  background: var(--gray-50); display: flex; align-items: center; justify-content: center;
+  margin-top: 1px; transition: background 0.15s, border-color 0.15s;
+}
+.ctx-check.checked { background: var(--green); border-color: var(--green-mid); }
+.ctx-check i { display: none; font-size: 11px; }
+.ctx-check.checked i { display: block; color: #fff; }
+.ctx-label { font-size: 13px; color: var(--gray-700); line-height: 1.45; }
+.ctx-sub { font-size: 11px; color: var(--gray-300); margin-top: 1px; font-family: 'DM Mono', monospace; }
+
+/* ── Readiness bar ── */
+.readiness-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 0.85rem 1rem; background: var(--white);
+  border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-card);
+}
+.readiness-label-wrap { flex: 1; }
+.readiness-text { font-size: 12px; font-family: 'DM Mono', monospace; color: var(--gray-500); margin-bottom: 6px; display: flex; justify-content: space-between; }
+.bar-track { height: 5px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.35s cubic-bezier(0.4,0,0.2,1); }
+.readiness-pct { font-size: 20px; font-weight: 600; font-family: 'DM Mono', monospace; color: var(--green); min-width: 52px; text-align: right; }
+
+/* ── Launch buttons ── */
+.launch-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.btn-launch {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--green); color: #fff; border: none; border-radius: var(--radius);
+  padding: 11px 22px; font-size: 14px; font-weight: 500; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; transition: background 0.15s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(29,158,117,0.25);
+}
+.btn-launch:hover:not(:disabled) { background: var(--green-mid); transform: translateY(-1px); }
+.btn-launch:active:not(:disabled) { transform: translateY(0); }
+.btn-launch:disabled {
+  background: var(--gray-100); color: var(--gray-300);
+  box-shadow: none; cursor: not-allowed; border: 1px solid var(--border);
+}
+.btn-secondary {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--white); color: var(--gray-700); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); padding: 11px 18px; font-size: 14px; font-weight: 500;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.12s;
+  text-decoration: none;
+}
+.btn-secondary:hover { background: var(--gray-100); }
+
+/* ── Prompt output ── */
+.prompt-box {
+  background: var(--gray-900); border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem; display: none;
+}
+.prompt-box.visible { display: block; }
+.prompt-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.prompt-title { font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green-light); }
+.copy-btn {
+  font-size: 11px; font-family: 'DM Mono', monospace;
+  color: var(--gray-300); background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 3px 10px;
+  cursor: pointer; display: flex; align-items: center; gap: 5px; transition: background 0.12s;
+}
+.copy-btn:hover { background: rgba(255,255,255,0.12); }
+.copy-btn.copied { color: var(--green-light); }
+.prompt-text {
+  font-family: 'DM Mono', monospace; font-size: 12px; line-height: 1.75;
+  color: #d4d0c8; white-space: pre-wrap; word-break: break-word;
+}
+.prompt-footer {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  font-size: 12px; color: var(--gray-500); font-family: 'DM Mono', monospace;
+}
+
+/* ── Page footer ── */
+.page-footer {
+  text-align: center; font-size: 11px; font-family: 'DM Mono', monospace;
+  color: var(--gray-300); margin-top: 2.5rem; padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo"><i class="ti ti-antenna-bars-5"></i></div>
+      <div class="header-text">
+        <h1>PMP SEO Audit Command Center</h1>
+        <p>Practice Made Perfect Marketing Group</p>
+      </div>
+    </div>
+    <span class="internal-badge">Internal use only</span>
+  </div>
+
+  <!-- Firm info -->
+  <div class="section-label">Firm info</div>
+  <div class="firm-grid">
+    <div class="field-wrap">
+      <label class="field-label" for="firmName">Firm name</label>
+      <input class="field-input" type="text" id="firmName" placeholder="e.g., Jeffcoat Injury Lawyers" />
+    </div>
+    <div class="field-wrap">
+      <label class="field-label" for="firmMarket">Primary market</label>
+      <input class="field-input" type="text" id="firmMarket" placeholder="e.g., Columbia SC" />
+    </div>
+  </div>
+  <div class="url-wrap">
+    <i class="ti ti-world url-icon"></i>
+    <input class="field-input mono" type="text" id="firmUrl" placeholder="https://example-lawfirm.com" />
+  </div>
+
+  <!-- Phase 3: Platform Setup -->
+  <div class="section-label">Phase 3 — platform setup</div>
+  <div class="phase-pill phase-setup"><i class="ti ti-settings"></i> Complete before opening Claude</div>
+
+  <!-- 3.1 Semrush -->
+  <div class="setup-block" id="block-semrush">
+    <div class="setup-block-header" onclick="toggleBlock('semrush')">
+      <div class="setup-block-title"><i class="ti ti-chart-dots-3"></i> 3.1 Semrush Project</div>
+      <div class="setup-block-meta">
+        <span class="task-progress" id="prog-semrush">0 / 3</span>
+        <i class="ti ti-chevron-down chevron"></i>
+      </div>
+    </div>
+    <div class="setup-block-body">
+      <p class="setup-desc">
+        Go to <strong>Semrush > Projects > + Create Project</strong>. Enter the firm's primary domain. Name it: <strong>[Firm Name] | [Market]</strong> (e.g., Jeffcoat | Columbia SC). Enable Site Audit, Position Tracking, On-Page SEO Checker, and Backlink Audit. Run the initial site crawl and let it complete. Set Position Tracking keywords to match what you'll use in BrightLocal.
+      </p>
+      <div class="task-row" onclick="toggleTask('s1',this)">
+        <span class="task-num">1</span>
+        <div class="task-check" id="s1"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">Semrush project created and named correctly</div><div class="task-sub">[Firm Name] | [Market] format</div></div>
+      </div>
+      <div class="task-row" onclick="toggleTask('s2',this)">
+        <span class="task-num">2</span>
+        <div class="task-check" id="s2"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">Semrush site audit completed</div><div class="task-sub">Site Audit, On-Page SEO Checker, Backlink Audit enabled</div></div>
+      </div>
+      <div class="task-row" onclick="toggleTask('s3',this)">
+        <span class="task-num">3</span>
+        <div class="task-check" id="s3"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">Position tracking live with primary keywords</div><div class="task-sub">Keywords matched to BrightLocal campaign</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.2 Majestic -->
+  <div class="setup-block" id="block-majestic">
+    <div class="setup-block-header" onclick="toggleBlock('majestic')">
+      <div class="setup-block-title"><i class="ti ti-link"></i> 3.2 Majestic</div>
+      <div class="setup-block-meta">
+        <span class="task-progress" id="prog-majestic">0 / 3</span>
+        <i class="ti ti-chevron-down chevron"></i>
+      </div>
+    </div>
+    <div class="setup-block-body">
+      <p class="setup-desc">
+        Pull data for the target domain and four major competitors. Log in to <strong>Majestic > Site Explorer</strong>. Run reports for the firm's domain, then identify four competitors: typically the top two to three PI firms ranking in the same market, plus one aspirational competitor. Record Trust Flow, Citation Flow, Referring Domains, and Total Backlinks for all five domains. You'll paste this into Claude in Phase 4.
+      </p>
+      <div class="task-row" onclick="toggleTask('m1',this)">
+        <span class="task-num">4</span>
+        <div class="task-check" id="m1"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">Majestic data pulled for firm domain</div><div class="task-sub">Trust Flow, Citation Flow, Referring Domains, Total Backlinks</div></div>
+      </div>
+      <div class="task-row" onclick="toggleTask('m2',this)">
+        <span class="task-num">5</span>
+        <div class="task-check" id="m2"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">Four competitors identified and Majestic data pulled for each</div><div class="task-sub">Top 2-3 local PI firms + one aspirational competitor</div></div>
+      </div>
+      <div class="task-row" onclick="toggleTask('m3',this)">
+        <span class="task-num">6</span>
+        <div class="task-check" id="m3"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">TF, CF, Referring Domains, and Total Backlinks recorded for all 5 domains</div><div class="task-sub">Ready to paste into Claude in Phase 4</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.3 BrightLocal -->
+  <div class="setup-block" id="block-brightlocal">
+    <div class="setup-block-header" onclick="toggleBlock('brightlocal')">
+      <div class="setup-block-title"><i class="ti ti-map-pin"></i> 3.3 BrightLocal Local Search Grid</div>
+      <div class="setup-block-meta">
+        <span class="task-progress" id="prog-brightlocal">0 / 4</span>
+        <i class="ti ti-chevron-down chevron"></i>
+      </div>
+    </div>
+    <div class="setup-block-body">
+      <p class="setup-desc">
+        Create one campaign per GBP location. If the firm has five GBPs, create five campaigns. Go to <strong>BrightLocal > Local Search Grid > Create Campaign</strong>. Set grid size: metro PI markets use 7x7 or 9x9 at 0.5-1 mile; regional or rural, widen the interval. Enter 3-5 primary keywords per campaign. Scans typically take 30-60 minutes.
+      </p>
+      <p class="setup-desc" style="margin-top:8px; border-top:none; padding-top:0;">
+        <strong>Default PI/MVA keywords:</strong> injury lawyer near me &bull; personal injury lawyers &bull; car accident lawyers &bull; personal injury attorneys &bull; car accident attorneys. Add practice-area-specific terms if applicable.
+      </p>
+      <div class="task-row" onclick="toggleTask('b1',this)">
+        <span class="task-num">7</span>
+        <div class="task-check" id="b1"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">BrightLocal campaign(s) created for each GBP location</div><div class="task-sub">One campaign per physical GBP location</div></div>
+      </div>
+      <div class="task-row" onclick="toggleTask('b2',this)">
+        <span class="task-num">8</span>
+        <div class="task-check" id="b2"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">Grid size and point interval configured</div><div class="task-sub">Metro: 7x7 or 9x9 at 0.5-1 mi / Regional: wider interval</div></div>
+      </div>
+      <div class="task-row" onclick="toggleTask('b3',this)">
+        <span class="task-num">9</span>
+        <div class="task-check" id="b3"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">Three to five primary keywords entered per campaign</div><div class="task-sub">PI/MVA defaults + practice-area terms as applicable</div></div>
+      </div>
+      <div class="task-row" onclick="toggleTask('b4',this)">
+        <span class="task-num">10</span>
+        <div class="task-check" id="b4"><i class="ti ti-check"></i></div>
+        <div><div class="task-text">BrightLocal grid scan completed</div><div class="task-sub">Allow 30-60 min — do not open Claude until scans finish</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Claude data gates -->
+  <div class="section-label">Claude data gates</div>
+  <div class="phase-pill phase-gate"><i class="ti ti-shield-check"></i> All gates must be closed before launching</div>
+
+  <div class="gates-grid">
+
+    <div class="gate-card pending" id="gate-semrush">
+      <div class="gate-top">
+        <span class="gate-name"><i class="ti ti-chart-dots-3"></i> Semrush</span>
+        <span class="gate-badge badge-pending" id="badge-semrush">Pending</span>
+      </div>
+      <p class="gate-note" id="note-semrush">On-page SEO, keyword analysis, competitive snapshot</p>
+      <div class="gate-btns">
+        <button class="gate-btn" onclick="setGate('semrush','connected',this)">MCP connected</button>
+        <button class="gate-btn" onclick="setGate('semrush','gap',this)">Flag as gap</button>
+      </div>
+    </div>
+
+    <div class="gate-card pending" id="gate-sf">
+      <div class="gate-top">
+        <span class="gate-name"><i class="ti ti-robot"></i> Screaming Frog</span>
+        <span class="gate-badge badge-pending" id="badge-sf">Pending</span>
+      </div>
+      <p class="gate-note" id="note-sf">Technical SEO crawl data</p>
+      <div class="gate-btns">
+        <button class="gate-btn" onclick="setGate('sf','connected',this)">MCP connected</button>
+        <button class="gate-btn" onclick="setGate('sf','csv',this)">CSV uploaded</button>
+        <button class="gate-btn" onclick="setGate('sf','gap',this)">Flag as gap</button>
+      </div>
+    </div>
+
+    <div class="gate-card pending" id="gate-majestic">
+      <div class="gate-top">
+        <span class="gate-name"><i class="ti ti-link"></i> Majestic</span>
+        <span class="gate-badge badge-pending" id="badge-majestic">Pending</span>
+      </div>
+      <p class="gate-note" id="note-majestic">Backlinks, Trust Flow, anchor text — CSV upload only</p>
+      <div class="gate-btns">
+        <button class="gate-btn" onclick="setGate('majestic','csv',this)">CSV uploaded</button>
+        <button class="gate-btn" onclick="setGate('majestic','gap',this)">Flag as gap</button>
+      </div>
+    </div>
+
+    <div class="gate-card pending" id="gate-brightlocal">
+      <div class="gate-top">
+        <span class="gate-name"><i class="ti ti-map-pin"></i> BrightLocal</span>
+        <span class="gate-badge badge-pending" id="badge-brightlocal">Pending</span>
+      </div>
+      <p class="gate-note" id="note-brightlocal">Local SEO, citations, GBP, local pack visibility</p>
+      <div class="gate-btns">
+        <button class="gate-btn" onclick="setGate('brightlocal','connected',this)">MCP connected</button>
+        <button class="gate-btn" onclick="setGate('brightlocal','csv',this)">Grids uploaded</button>
+        <button class="gate-btn" onclick="setGate('brightlocal','gap',this)">Flag as gap</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Context intake -->
+  <div class="section-label">Context intake</div>
+  <div class="phase-pill phase-ctx"><i class="ti ti-notes"></i> Provide before running — or flag as missing</div>
+  <div class="context-box">
+    <div class="ctx-row" onclick="toggleCtx('transcript',this)">
+      <div class="ctx-check" id="ctx-transcript"><i class="ti ti-check"></i></div>
+      <div>
+        <div class="ctx-label">Discovery call transcript or notes provided</div>
+        <div class="ctx-sub">paste, upload, or summarize in Claude before running</div>
+      </div>
+    </div>
+    <div class="ctx-row" onclick="toggleCtx('priorities',this)">
+      <div class="ctx-check" id="ctx-priorities"><i class="ti ti-check"></i></div>
+      <div>
+        <div class="ctx-label">Firm priorities, markets, and practice area focus provided</div>
+        <div class="ctx-sub">locations, case types, competitor threats, growth goals</div>
+      </div>
+    </div>
+    <div class="ctx-row" onclick="toggleCtx('analytics',this)">
+      <div class="ctx-check" id="ctx-analytics"><i class="ti ti-check"></i></div>
+      <div>
+        <div class="ctx-label">GA / GSC access or additional data connected or uploaded</div>
+        <div class="ctx-sub">optional — will be noted as gap if unavailable</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Readiness -->
+  <div class="section-label">Readiness</div>
+  <div class="readiness-row">
+    <div class="readiness-label-wrap">
+      <div class="readiness-text">
+        <span>Pre-flight completion</span>
+        <span id="readiness-label">Complete Phase 3 setup and close all gates</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+    </div>
+    <div class="readiness-pct" id="readinessPct">0%</div>
+  </div>
+
+  <!-- Launch -->
+  <div class="section-label">Launch</div>
+  <div class="launch-row">
+    <button class="btn-launch" id="btnGenerate" disabled onclick="generatePrompt()">
+      <i class="ti ti-player-play"></i> Generate pre-flight prompt
+    </button>
+    <a class="btn-secondary" href="https://claude.ai" target="_blank" rel="noopener">
+      <i class="ti ti-external-link"></i> Open Claude
+    </a>
+  </div>
+
+  <!-- Prompt output -->
+  <div class="section-label" id="promptSectionLabel" style="display:none">Pre-flight prompt — copy into Claude</div>
+  <div class="prompt-box" id="promptBox">
+    <div class="prompt-header">
+      <span class="prompt-title">Gate 7 pre-flight prompt</span>
+      <button class="copy-btn" onclick="copyPrompt()"><i class="ti ti-copy"></i> <span id="copyLabel">Copy</span></button>
+    </div>
+    <div class="prompt-text" id="promptText"></div>
+    <div class="prompt-footer">Paste this into a Claude conversation with the pmp-seo-audit skill active. Say "go" when prompted to start the audit.</div>
+  </div>
+
+  <div class="page-footer">Practice Made Perfect Marketing Group &nbsp;&bull;&nbsp; Internal Use Only &nbsp;&bull;&nbsp; Do not distribute to clients</div>
+</div>
+
+<script>
+const gateState = { semrush: 'pending', sf: 'pending', majestic: 'pending', brightlocal: 'pending' };
+const ctxState  = { transcript: false, priorities: false, analytics: false };
+
+const taskGroups = {
+  semrush:    ['s1','s2','s3'],
+  majestic:   ['m1','m2','m3'],
+  brightlocal:['b1','b2','b3','b4']
+};
+const taskState = {};
+['s1','s2','s3','m1','m2','m3','b1','b2','b3','b4'].forEach(t => taskState[t] = false);
+
+const gateNotes = {
+  semrush:    { connected:'Ready — MCP active for on-page SEO and competitive analysis', gap:'Flagged as gap — on-page and competitive sections will be limited', pending:'On-page SEO, keyword analysis, competitive snapshot' },
+  sf:         { connected:'Ready — MCP active for technical crawl', csv:'Ready — CSV confirmed for technical SEO section', gap:'Flagged as gap — technical SEO will be noted as incomplete', pending:'Technical SEO crawl data' },
+  majestic:   { csv:'Ready — backlink CSV confirmed', gap:'Flagged as gap — off-page section will be noted as incomplete', pending:'Backlinks, Trust Flow, anchor text — CSV upload only' },
+  brightlocal:{ connected:'Ready — MCP active for local SEO', csv:'Ready — local grid reports confirmed for all locations', gap:'Flagged as gap — local SEO section will be noted as incomplete', pending:'Local SEO, citations, GBP, local pack visibility' }
+};
+const gateLabels  = { semrush:'Semrush', sf:'Screaming Frog', majestic:'Majestic', brightlocal:'BrightLocal' };
+const statusLabels = { connected:'MCP connected', csv:'CSV uploaded', gap:'flagged as gap' };
+
+function toggleBlock(id) {
+  const el = document.getElementById('block-' + id);
+  el.classList.toggle('open');
+}
+
+function toggleTask(id, row) {
+  taskState[id] = !taskState[id];
+  const box = document.getElementById(id);
+  if (taskState[id]) box.classList.add('checked');
+  else box.classList.remove('checked');
+  updateTaskProgress();
+  updateReadiness();
+}
+
+function updateTaskProgress() {
+  Object.entries(taskGroups).forEach(([group, tasks]) => {
+    const done = tasks.filter(t => taskState[t]).length;
+    const el = document.getElementById('prog-' + group);
+    if (el) el.textContent = done + ' / ' + tasks.length;
+  });
+}
+
+function setGate(gate, status, btn) {
+  gateState[gate] = status;
+  const card  = document.getElementById('gate-' + gate);
+  const badge = document.getElementById('badge-' + gate);
+  const note  = document.getElementById('note-' + gate);
+
+  card.className = 'gate-card ' + (status === 'gap' ? 'gap' : status === 'pending' ? 'pending' : 'connected');
+
+  if (status === 'connected' || status === 'csv') {
+    badge.textContent = status === 'csv' ? 'CSV ready' : 'Connected';
+    badge.className = 'gate-badge badge-connected';
+  } else if (status === 'gap') {
+    badge.textContent = 'Gap flagged';
+    badge.className = 'gate-badge badge-gap';
+  } else {
+    badge.textContent = 'Pending';
+    badge.className = 'gate-badge badge-pending';
+  }
+
+  note.textContent = gateNotes[gate][status] || gateNotes[gate].pending;
+
+  card.querySelectorAll('.gate-btn').forEach(b => b.classList.remove('active','gap-active'));
+  if (status === 'gap') btn.classList.add('gap-active');
+  else if (status !== 'pending') btn.classList.add('active');
+
+  updateReadiness();
+}
+
+function toggleCtx(key, row) {
+  ctxState[key] = !ctxState[key];
+  const el = document.getElementById('ctx-' + key);
+  if (ctxState[key]) el.classList.add('checked');
+  else el.classList.remove('checked');
+  updateReadiness();
+}
+
+function updateReadiness() {
+  const allTasks   = Object.keys(taskState);
+  const allGates   = ['semrush','sf','majestic','brightlocal'];
+  const ctxKeys    = ['transcript','priorities','analytics'];
+  const url        = document.getElementById('firmUrl').value.trim();
+
+  const tasksDone  = allTasks.filter(t => taskState[t]).length;
+  const gatesClosed = allGates.filter(g => gateState[g] !== 'pending').length;
+  const ctxDone    = ctxKeys.filter(k => ctxState[k]).length;
+  const urlDone    = url.length > 4 ? 1 : 0;
+
+  const total = allTasks.length + allGates.length + ctxKeys.length + 1;
+  const score = tasksDone + gatesClosed + ctxDone + urlDone;
+
+  const pct = Math.round((score / total) * 100);
+  document.getElementById('readinessPct').textContent = pct + '%';
+  document.getElementById('barFill').style.width = pct + '%';
+
+  const ready = allTasks.every(t => taskState[t]) && allGates.every(g => gateState[g] !== 'pending') && url.length > 4;
+  document.getElementById('btnGenerate').disabled = !ready;
+
+  if (ready) {
+    document.getElementById('readiness-label').textContent = 'Ready to generate prompt';
+  } else if (!urlDone) {
+    document.getElementById('readiness-label').textContent = 'Enter the firm URL to continue';
+  } else {
+    const taskLeft = allTasks.length - tasksDone;
+    const gateLeft = allGates.length - gatesClosed;
+    const parts = [];
+    if (taskLeft) parts.push(taskLeft + ' setup task' + (taskLeft > 1 ? 's' : '') + ' remaining');
+    if (gateLeft) parts.push(gateLeft + ' gate' + (gateLeft > 1 ? 's' : '') + ' to close');
+    document.getElementById('readiness-label').textContent = parts.join(' · ') || 'Almost there';
+  }
+}
+
+function generatePrompt() {
+  const firmName   = document.getElementById('firmName').value.trim() || '[Firm Name]';
+  const firmMarket = document.getElementById('firmMarket').value.trim() || '[Market]';
+  const url        = document.getElementById('firmUrl').value.trim();
+  const allGates   = ['semrush','sf','majestic','brightlocal'];
+
+  const lines = [];
+  lines.push('Run PMP SEO audit pre-flight check.');
+  lines.push('');
+  lines.push('Firm: ' + firmName);
+  lines.push('Market: ' + firmMarket);
+  lines.push('URL: ' + url);
+  lines.push('');
+  lines.push('Phase 3 platform setup: complete');
+  lines.push('  - Semrush project created and crawl completed');
+  lines.push('  - Majestic data pulled for firm + 4 competitors (TF, CF, RDs, backlinks recorded)');
+  lines.push('  - BrightLocal campaigns live and grid scans completed for all GBP locations');
+  lines.push('');
+  lines.push('Claude data gate status:');
+  allGates.forEach(g => {
+    const status = gateState[g];
+    lines.push('  - ' + gateLabels[g] + ': ' + (statusLabels[status] || 'pending'));
+  });
+
+  const gaps = allGates.filter(g => gateState[g] === 'gap').map(g => gateLabels[g]);
+  if (gaps.length) {
+    lines.push('');
+    lines.push('Flagged data gaps: ' + gaps.join(', '));
+    lines.push('Note these sections as incomplete in the audit and flag what data is needed.');
+  }
+
+  lines.push('');
+  lines.push('Context intake:');
+  lines.push('  - Discovery call notes: ' + (ctxState.transcript ? 'provided' : 'not provided — note for Gate 6'));
+  lines.push('  - Firm priorities and market context: ' + (ctxState.priorities ? 'provided' : 'not provided — note for Gate 6'));
+  lines.push('  - GA / GSC data: ' + (ctxState.analytics ? 'available' : 'not available — note as gap'));
+
+  lines.push('');
+  lines.push('Present the Gate 7 pre-flight confirmation summary in the exact format from the audit skill. Await my "go" before running any audit sections.');
+
+  document.getElementById('promptText').textContent = lines.join('\n');
+  document.getElementById('promptBox').classList.add('visible');
+  document.getElementById('promptSectionLabel').style.display = '';
+  document.getElementById('promptBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyPrompt() {
+  const text = document.getElementById('promptText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const label = document.getElementById('copyLabel');
+    const btn   = label.closest('button');
+    label.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { label.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+document.getElementById('firmUrl').addEventListener('input', updateReadiness);
+document.getElementById('firmName').addEventListener('input', updateReadiness);
+document.getElementById('firmMarket').addEventListener('input', updateReadiness);
+</script>
+</body>
+</html>
